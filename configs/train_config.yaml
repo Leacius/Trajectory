@@ -1,0 +1,33 @@
+root: ../MISTTdataset/TTcompare/
+train_list: ../MISTTdataset/TTcompare/labels/GT_cropped_action_frames_train8F.txt
+val_list: ../MISTTdataset/TTcompare/labels/GT_cropped_action_frames_test8F.txt
+# train_list: ../MISTTdataset/TTcompare/data/8FLTrain.txt
+# val_list: ../MISTTdataset/TTcompare/data/8FLTest.txt
+num_classes: 8
+
+# Model Configs
+tune_from: ""
+sample_length: 24
+
+# Learning Configs
+epochs: 50
+batch_size: 32
+# lr_scheduler: step
+lr_decay_rate: 0.9
+lr: 0.001
+# lr_steps: [5, 10, 20]
+# momentum: 0.9
+weight_decay: 0.0001
+# no_partialbn: True
+clip_gradient: 20
+dropout: 0.5
+
+# Monitor Configs
+print_freq: 20
+eval_freq: 1
+
+# Runtime Configs
+workers: 8
+resume: ''
+evaluate: False
+start_epoch: 0
