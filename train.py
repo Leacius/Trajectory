@@ -44,11 +44,6 @@ class Trainer:
         # Create the log and model folder
         self.check_rootfolders()
 
-        # Set up weight and biases
-        wandb.login()
-        wandb.require("legacy-service")
-        wandb.init(project="LSTM", name=self.store_name, config=self.args)
-
         # Set up the logger
         logger = Path(f"./log/{self.store_name}/log.txt")
         self.logger = setup_logger(output=str(logger), name=f'LSTM')
@@ -274,16 +269,16 @@ class Trainer:
                 train_loss, train_top1, train_top5 = self.train_one_epoch(epoch)
                 self.scheduler.step()
                 # break
-                wandb.log({'loss/train': train_loss})
-                wandb.log({'acc/train_top1': train_top1})
-                wandb.log({'acc/train_top2': train_top5})
-                wandb.log({'lr': self.optimizer.param_groups[-1]['lr']})
+                self.logger.info({'loss/train': train_loss})
+                self.logger.info({'acc/train_top1': train_top1})
+                self.logger.info({'acc/train_top2': train_top5})
+                self.logger.info({'lr': self.optimizer.param_groups[-1]['lr']})
                 self.epoch = epoch + 1
                 if (epoch + 1) % self.args.eval_freq == 0 or epoch == self.args.epochs - 1:
                     acc1, acc5, val_loss = self.validate_one_epoch(epoch)
-                    wandb.log({'loss/test': val_loss})
-                    wandb.log({'acc/test_top1': acc1})
-                    wandb.log({'acc/test_top2': acc5})
+                    self.logger.info({'loss/test': val_loss})
+                    self.logger.info({'acc/test_top1': acc1})
+                    self.logger.info({'acc/test_top2': acc5})
                     if acc1 > self.is_best_acc:
                         self.is_best_acc = acc1
                         self.is_best_loss = val_loss
@@ -302,9 +297,9 @@ class Trainer:
                             'best_acc1': self.is_best_acc,
                         }, epoch + 1)
                     
-                    wandb.log({'acc/test_top1_best': self.is_best_acc})
+                    self.logger.info({'acc/test_top1_best': self.is_best_acc})
                     self.logger.info(("Best Prec@1: '{}'".format(self.is_best_acc)))
 
-            wandb.finish()
+            self.logger.infoish()
             return f"{self.store_name}" + "\n" + f"Best Prec@1: {self.is_best_acc}"
         Training_Message()
