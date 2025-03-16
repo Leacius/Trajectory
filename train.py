@@ -1,5 +1,4 @@
 import torch
-import wandb
 import numpy as np
 import seaborn as sns
 import torch.nn as nn
@@ -8,7 +7,6 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 from pathlib import Path
-from knockknock import discord_sender
 
 from utils.lstm import LSTM
 from utils.optimize_policy import get_optim_policies
@@ -16,9 +14,6 @@ from utils.accuracy import accuracy
 from utils.logger import setup_logger
 from utils.dataset import trajectory_dataset
 from utils.average_meter import average_meter
-
-
-webhook_url = "https://discordapp.com/api/webhooks/1319603151556448358/vkUwcCsV2lF2yP6Bf6K8Lgwjnr1oRRhJZtXYx6FAR-5h2PWYrlLZ2rvcNMfSO1Poo1id"
 
 class Trainer:
     def __init__(self, args) -> None:
